@@ -360,6 +360,15 @@ export function ParticleUniverse({
   useFrame((state, delta) => {
     if (!groupRef.current || document.hidden) return;
 
+    // Responsive camera Z-scaling based on canvas width
+    const width = state.size.width;
+    let targetZ = 18;
+    if (width < 640) targetZ = 28; // Mobile
+    else if (width < 1024) targetZ = 22; // Tablet
+
+    state.camera.position.z += (targetZ - state.camera.position.z) * 0.1;
+    state.camera.updateProjectionMatrix();
+
     const { clock } = state;
     const progress = scrollProgressRef.current;
     const time = clock.elapsedTime;
