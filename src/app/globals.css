@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+/* ============================================================
+   SISTEMA DE DISEÑO — "Observatorio"
+   ------------------------------------------------------------
+   Concepto: un panel de observatorio de datos — fondo neutro
+   near-black, acento primario ámbar cálido (datos "vivos"),
+   acento secundario teal (análisis, contraste armónico).
+   Tipografía: Outfit (display), Inter (cuerpo), IBM Plex Mono
+   (labels técnicos).
+   ============================================================ */
+
+:root {
+  /* --- Fondos y superficies ---
+     Near-black neutro (sin tinte azul) para que los acentos
+     ámbar y teal brillen sin competencia de temperatura. */
+  --bg: #09090b;
+  --bg-elevated: #0f0f12;
+  --surface: #16161a;
+  --surface-hover: #1c1c22;
+  --border: #1e1e24;
+  --border-strong: #2a2a32;
+
+  /* --- Texto ---
+     Cream cálido en vez de blanco puro: coherente con la
+     temperatura ámbar del acento primario y reduce fatiga
+     en lectura larga sobre fondo oscuro. */
+  --text-primary: #e8e2d9;
+  --text-secondary: #9c9589;
+  --text-tertiary: #6b665f;
+
+  /* --- Acentos ---
+     Ámbar cálido como primario: datos "vivos", energía,
+     CTAs. Teal como secundario: análisis, contraste armónico.
+     Nunca dos acentos compitiendo en el mismo componente. */
+  --accent: #f59e0b;
+  --accent-dim: #b45309;
+  --accent-2: #14b8a6;
+  --accent-2-dim: #0d9488;
+
+  /* Estados semánticos (siempre con texto/ícono, no solo color). */
+  --positive: #6fb98f;
+  --negative: #d97b7b;
+
+  --focus-ring: #f59e0b;
+
+  /* --- Radii ---
+     Ligeramente más redondeados que la versión anterior:
+     balance entre panel de instrumento y calidez visual. */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* --- Sombras y glow --- */
+  --shadow-panel: 0 1px 0 0 rgba(255, 255, 255, 0.02) inset,
+    0 8px 24px -12px rgba(0, 0, 0, 0.7);
+  --glow-accent: 0 0 0 1px rgba(245, 158, 11, 0.3),
+    0 0 24px -4px rgba(245, 158, 11, 0.25);
+  --glow-accent-2: 0 0 0 1px rgba(20, 184, 166, 0.3),
+    0 0 24px -4px rgba(20, 184, 166, 0.25);
+
+  /* --- Movimiento --- */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+}
+
+/* ============================================================
+   Mapeo a utilidades de Tailwind v4 (motor CSS-first: @theme)
+   ============================================================ */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-2: var(--accent-2);
+  --color-accent-2-dim: var(--accent-2-dim);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-ibm-plex-mono);
+  --font-display: var(--font-outfit);
+
+  /* Escala tipográfica ~1.25 */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 2.9rem;
+  --text-5xl: 3.75rem;
+  --text-6xl: 4.75rem;
+  --text-7xl: 6rem;
+  --text-8xl: 8rem;
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --ease-standard: var(--ease-standard);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+/* Foco de teclado siempre visible */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen-reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Glow card hover effect */
+.glow-card {
+  position: relative;
+  transition: border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+.glow-card:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: var(--glow-accent);
+}
