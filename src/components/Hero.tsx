@@ -79,6 +79,14 @@ export function Hero() {
             >
               Contactar
             </a>
+            <a
+              href="/CV_NeiderArenasAnalistaDeDatos.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-[var(--radius-md)] border border-border-strong px-6 py-3 font-mono text-sm text-text-primary transition-all duration-200 hover:border-accent hover:text-accent"
+            >
+              Descargar CV
+            </a>
           </motion.div>
 
           <motion.div
@@ -88,14 +96,18 @@ export function Hero() {
             className="mt-10 flex items-center gap-5 text-sm text-text-tertiary"
           >
             <a
-              href="#"
+              href="https://github.com/Nei44"
+              target="_blank"
+              rel="noopener noreferrer"
               className="transition-colors duration-150 hover:text-accent"
             >
               GitHub
             </a>
             <span aria-hidden="true">·</span>
             <a
-              href="#"
+              href="https://www.linkedin.com/in/neider-arenas-de-la-cruz-163439308?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+              target="_blank"
+              rel="noopener noreferrer"
               className="transition-colors duration-150 hover:text-accent"
             >
               LinkedIn

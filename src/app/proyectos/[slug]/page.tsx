@@ -60,6 +60,17 @@ export default async function ProjectPage({
       </h1>
       <p className="mt-4 text-base leading-relaxed text-text-secondary">{project.summary}</p>
 
+      {project.metrics && project.metrics.length > 0 && (
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 border-y border-border py-6">
+          {project.metrics.map((metric, i) => (
+            <div key={i}>
+              <p className="text-2xl font-semibold text-accent">{metric.value}</p>
+              <p className="mt-1 text-xs text-text-tertiary uppercase tracking-wider">{metric.label}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="mt-6 flex flex-wrap gap-2">
         {project.tools.map((tool) => (
           <span
@@ -88,21 +99,23 @@ export default async function ProjectPage({
         {project.repoUrl ? (
           <a
             href={project.repoUrl}
+            target="_blank" rel="noopener noreferrer"
             className="rounded-sm border border-border-strong px-4 py-2 font-mono text-xs text-text-primary hover:border-accent hover:text-accent"
           >
             Repositorio
           </a>
         ) : (
           <span className="rounded-sm border border-dashed border-border-strong px-4 py-2 font-mono text-xs text-text-tertiary">
-            [ENLACE AL REPOSITORIO]
+            [ENLACE AL REPOSITORIO PENDIENTE]
           </span>
         )}
-        {project.demoUrl && (
+        {project.notebookUrl && (
           <a
-            href={project.demoUrl}
+            href={project.notebookUrl}
+            target="_blank" rel="noopener noreferrer"
             className="rounded-sm border border-border-strong px-4 py-2 font-mono text-xs text-text-primary hover:border-accent hover:text-accent"
           >
-            Demo / Dashboard
+            Notebook
           </a>
         )}
       </div>

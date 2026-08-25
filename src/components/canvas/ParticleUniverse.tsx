@@ -128,11 +128,11 @@ const particleFragmentShader = /* glsl */ `
     // Soft glow with bright core
     float alpha = smoothstep(0.5, 0.05, dist) * vAlpha;
     // Boost alpha for glowing particles
-    alpha = mix(alpha, alpha * 1.6 + 0.4, clamp(vSignalGlow, 0.0, 1.0));
-    float core = smoothstep(0.12, 0.0, dist) * 0.4;
+    alpha = mix(alpha, alpha * 1.8 + 0.5, clamp(vSignalGlow, 0.0, 1.0));
+    float core = smoothstep(0.18, 0.0, dist) * 0.8;
 
     // Boost brightness (color) based on signal glow
-    vec3 col = vColor * (1.0 + core) * (1.0 + vSignalGlow * 3.0);
+    vec3 col = vColor * (1.5 + core) * (1.0 + vSignalGlow * 4.0);
 
     gl_FragColor = vec4(col, alpha);
   }

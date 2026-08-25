@@ -25,7 +25,7 @@ export function Contacto() {
   const onSubmit = async (values: ContactFormValues) => {
     setServerError(null);
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("https://formspree.io/f/TU_ID_DE_FORMSPREE", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -71,13 +71,17 @@ export function Contacto() {
                 correo@ejemplo.com
               </a>
               <a
-                href="#"
+                href="https://github.com/Nei44"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-text-secondary transition-colors duration-150 hover:text-accent"
               >
                 GitHub
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/in/neider-arenas-de-la-cruz-163439308?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-text-secondary transition-colors duration-150 hover:text-accent"
               >
                 LinkedIn
