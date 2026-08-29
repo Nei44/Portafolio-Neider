@@ -23,8 +23,8 @@ const particleVertexShader = /* glsl */ `
   uniform float uProgress;
   uniform float uTime;
   uniform float uPixelRatio;
-  uniform vec3 uSignalPositions[3];
-  uniform float uSignalIntensities[3];
+  uniform vec3 uSignalPositions[6];
+  uniform float uSignalIntensities[6];
 
   varying vec3 vColor;
   varying float vAlpha;
@@ -54,64 +54,86 @@ const particleVertexShader = /* glsl */ `
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mvPosition;
 
-    // Point size with distance attenuation
-    float baseSize = 2.0 + aRandom * 1.8;
+    // Point size — uses its OWN random value, decorrelated from aRandom
+    // (which drives color). Before, size and color both keyed off aRandom,
+    // so the whitest/brightest particles were always the biggest ones too —
+    // that's what produced the oversized white clump. Also lowered the max.
+    float sizeRand = fract(sin(aRandom * 91.345 + 7.13) * 43758.5453);
+    float baseSize = 1.0 + pow(sizeRand, 1.8) * 3.3;
+
+    // Isolated "star" points need extra size to read clearly on their own —
+    // in the dense brain/network states they reinforce each other, but spread
+    // out as stars they were getting lost. This is the fix for that.
+    float starState = smoothstep(0.66, 0.85, uProgress);
+    baseSize += starState * 1.2;
 
     // Larger + pulsing during brain state ("glowing brain")
     float brainInfluence = smoothstep(0.15, 0.33, uProgress)
                          * (1.0 - smoothstep(0.50, 0.60, uProgress));
-    baseSize += brainInfluence * 2.5
+    baseSize += brainInfluence * 1.0
               * (0.6 + 0.4 * sin(uTime * 2.5 + aRandom * 12.0));
 
     // Neural signal influence on size
     float signalGlow = 0.0;
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 6; i++) {
       float dist = distance(pos, uSignalPositions[i]);
       signalGlow += smoothstep(0.8, 0.0, dist) * uSignalIntensities[i];
     }
     vSignalGlow = signalGlow;
-    baseSize += signalGlow * 3.5;
+    baseSize += signalGlow * 1.8;
 
     gl_PointSize = baseSize * uPixelRatio * (10.0 / max(-mvPosition.z, 0.1));
 
-    // Color transitions (Teoría del Color: Ámbar - Púrpura - Turquesa - Blanco)
-    vec3 amber       = vec3(0.961, 0.620, 0.043);
-    vec3 brightAmber = vec3(0.984, 0.749, 0.141);
-    vec3 purple      = vec3(0.588, 0.157, 0.824); // Violeta brillante
-    vec3 teal        = vec3(0.078, 0.722, 0.651); // Turquesa
-    vec3 warmWhite   = vec3(0.98, 0.95, 0.88);
+    // Single accent hue (matches the amber/gold in "Arenas") — no purple/teal
+    // 4 narrative color stops, synced to the same scroll segments as the shape
+    // morph: desorden (ámbar) → cerebro (magenta) → redes (cian) → desorden (ámbar)
+    vec3 c0 = vec3(0.961, 0.620, 0.043); // desorden inicial — ámbar de marca
+    vec3 c1 = vec3(0.82, 0.28, 0.58);    // cerebro — magenta vivo
+    vec3 c2 = vec3(0.20, 0.65, 0.95);    // redes neuronales — azul cian
+    vec3 c3 = vec3(0.961, 0.620, 0.043); // desorden final — regresa al ámbar
 
+    vec3 goldColor;
     if (uProgress < 0.33) {
-      vColor = mix(amber, brightAmber, stateT);
-      // Destellos púrpura y turquesa
-      if (aRandom > 0.85) {
-        vColor = mix(purple, brightAmber, stateT);
-      } else if (aRandom > 0.68) {
-        vColor = mix(teal * 0.8, brightAmber, stateT);
-      }
+      goldColor = mix(c0, c1, smoothstep(0.0, 0.33, uProgress));
     } else if (uProgress < 0.66) {
-      // Mezcla análoga y fluida: Ámbar -> Púrpura -> Turquesa
-      if (stateT < 0.5) {
-        vColor = mix(brightAmber, purple, stateT * 2.0);
-      } else {
-        vColor = mix(purple, teal, (stateT - 0.5) * 2.0);
-      }
-      // Detalle de variedad de colores
-      if (aRandom > 0.85) vColor = mix(amber, purple * 1.2, stateT);
-      else if (aRandom > 0.70) vColor = mix(teal * 1.1, purple, stateT);
+      goldColor = mix(c1, c2, smoothstep(0.33, 0.66, uProgress));
     } else {
-      vColor = mix(teal, warmWhite, stateT);
-      if (aRandom > 0.80) {
-        vColor = mix(purple, warmWhite, stateT);
-      }
+      goldColor = mix(c2, c3, smoothstep(0.66, 1.0, uProgress));
+    }
+    vec3 whiteColor = vec3(1.0, 1.0, 1.0);
+
+    // Phase color + a mix of accents: ~10% blue, ~15% purple, ~10% white
+    // sparks, phase color fills the rest
+    vec3 blueColor = vec3(0.25, 0.55, 0.95);
+    vec3 purpleColor = vec3(0.62, 0.22, 0.85);
+
+    if (aRandom < 0.65) {
+      vColor = goldColor;
+    } else if (aRandom < 0.75) {
+      vColor = blueColor;
+    } else if (aRandom < 0.90) {
+      vColor = purpleColor;
+    } else {
+      vColor = whiteColor;
     }
 
-    // Alpha
-    vAlpha = 0.85 - 0.15 * smoothstep(5.0, 25.0, -mvPosition.z);
-    // Stars state: vary alpha
-    if (uProgress > 0.66) {
-      vAlpha *= mix(1.0, 0.3 + aRandom * 0.7, stateT);
+    // Make the brightest few pop
+    if (aRandom > 0.96) {
+      vColor = mix(vColor, vec3(1.0), 0.8);
     }
+
+    // Alpha with depth attenuation
+    vAlpha = 1.0 - 0.05 * smoothstep(5.0, 25.0, -mvPosition.z);
+
+    // Parpadeo / Twinkle: only a subset of particles blink noticeably, like
+    // neurons firing — the rest stay steady so the network reads clearly
+    // instead of the whole scene flickering at once.
+    float isBlinker = step(0.65, fract(aRandom * 17.233));
+    float blinkPhase = uTime * (1.2 + aRandom * 3.0) + aRandom * 25.0;
+    float blink = sin(blinkPhase) * 0.5 + 0.5;
+    blink = pow(blink, 3.0); // snappier on/off pulse, not a soft sine fade
+    float twinkleMix = mix(1.0, mix(0.12, 1.0, blink), isBlinker);
+    vAlpha *= twinkleMix;
   }
 `;
 
@@ -125,14 +147,22 @@ const particleFragmentShader = /* glsl */ `
     float dist = length(center);
     if (dist > 0.5) discard;
 
-    // Soft glow with bright core
-    float alpha = smoothstep(0.5, 0.05, dist) * vAlpha;
-    // Boost alpha for glowing particles
-    alpha = mix(alpha, alpha * 1.8 + 0.5, clamp(vSignalGlow, 0.0, 1.0));
-    float core = smoothstep(0.18, 0.0, dist) * 0.8;
+    // Crisp, hard-edged disc with only a hairline anti-aliased rim — a soft
+    // radial gradient always reads as a blurry blob no matter how tight the
+    // exponent, so points are drawn as defined discs instead.
+    float core = 1.0 - smoothstep(0.36, 0.5, dist);
 
-    // Boost brightness (color) based on signal glow
-    vec3 col = vColor * (1.5 + core) * (1.0 + vSignalGlow * 4.0);
+    float alpha = vAlpha * core * 1.9;
+    alpha = mix(alpha, alpha * 1.6 + 0.4, clamp(vSignalGlow, 0.0, 1.0));
+
+    vec3 col = vColor * 1.9;
+    col += vColor * vSignalGlow * 4.0;
+
+    // Small hot-white glint in the center, still tightly bounded — a sharp
+    // specular highlight, not a wide soft core
+    if (dist < 0.14) {
+       col = mix(col, vec3(1.0), 0.6);
+    }
 
     gl_FragColor = vec4(col, alpha);
   }
@@ -166,43 +196,27 @@ const lineVertexShader = /* glsl */ `
       pos = mix(aTarget2, aTarget3, stateT);
     }
 
-    // Ondulación senoidal en las aristas (capas red), amortiguada en extremos
-    float damping = sin(aLineProgress * 3.14159265);
-    float networkInfluence = smoothstep(0.33, 0.55, uProgress) * (1.0 - smoothstep(0.70, 0.88, uProgress));
-    float waveY = sin(uTime * 2.8 - pos.x * 0.4) * 0.45 * networkInfluence * damping;
-    float waveZ = cos(uTime * 2.8 - pos.x * 0.4) * 0.35 * networkInfluence * damping;
-    pos.y += waveY;
-    pos.z += waveZ;
-
+    // Removed wave logic to keep lines perfectly straight
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
     vWorldPosition = pos;
 
-    // Visibility per state
-    float sphereA  = 0.06;
-    float brainA   = 0.2;
-    float networkA = 0.3;
-    float starsA   = 0.08; // Enabled constellation lines in stars state
+    // Thin and light — dense but not a solid saturated mass (per reference)
+    vAlpha = 0.10;
+
+    // Same 4-stop narrative color as the particles, so lines and points
+    // always shift together: desorden (ámbar) → cerebro (magenta) →
+    // redes (cian) → desorden (ámbar)
+    vec3 c0 = vec3(0.961, 0.620, 0.043);
+    vec3 c1 = vec3(0.82, 0.28, 0.58);
+    vec3 c2 = vec3(0.20, 0.65, 0.95);
+    vec3 c3 = vec3(0.961, 0.620, 0.043);
 
     if (uProgress < 0.33) {
-      vAlpha = mix(sphereA, brainA, stateT);
+      vColor = mix(c0, c1, smoothstep(0.0, 0.33, uProgress));
     } else if (uProgress < 0.66) {
-      vAlpha = mix(brainA, networkA, stateT);
+      vColor = mix(c1, c2, smoothstep(0.33, 0.66, uProgress));
     } else {
-      vAlpha = mix(networkA, starsA, stateT);
-    }
-
-    // Color transitions (Teoría del Color: Ámbar - Púrpura - Turquesa)
-    vec3 amber  = vec3(0.961, 0.620, 0.043);
-    vec3 purple = vec3(0.588, 0.157, 0.824);
-    vec3 teal   = vec3(0.078, 0.722, 0.651);
-
-    // Smooth color blend matching the particle progression
-    vec3 baseColor = mix(amber, teal, smoothstep(0.2, 0.7, uProgress));
-    if (uProgress > 0.20 && uProgress < 0.80) {
-      float pFactor = smoothstep(0.20, 0.50, uProgress) * (1.0 - smoothstep(0.50, 0.80, uProgress));
-      vColor = mix(baseColor, purple, pFactor * 0.8);
-    } else {
-      vColor = baseColor;
+      vColor = mix(c2, c3, smoothstep(0.66, 1.0, uProgress));
     }
   }
 `;
@@ -212,19 +226,19 @@ const lineFragmentShader = /* glsl */ `
   varying vec3 vColor;
   varying vec3 vWorldPosition;
 
-  uniform vec3 uSignalPositions[3];
-  uniform float uSignalIntensities[3];
+  uniform vec3 uSignalPositions[6];
+  uniform float uSignalIntensities[6];
 
   void main() {
     float signalGlow = 0.0;
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 6; i++) {
       float dist = distance(vWorldPosition, uSignalPositions[i]);
       signalGlow += smoothstep(0.7, 0.0, dist) * uSignalIntensities[i];
     }
 
-    // Boost color (to white) and alpha for lines close to the signal
-    vec3 col = mix(vColor, vec3(1.0, 1.0, 1.0), signalGlow * 0.8);
-    float alpha = mix(vAlpha, vAlpha * 2.5 + 0.7, clamp(signalGlow, 0.0, 1.0));
+    // Restrained multiplier — 1.3 was clipping toward yellow where lines overlap
+    vec3 col = mix(vColor * 1.05, vec3(1.0, 1.0, 1.0), signalGlow * 1.5);
+    float alpha = mix(vAlpha, vAlpha * 4.0 + 0.6, clamp(signalGlow, 0.0, 1.0));
 
     gl_FragColor = vec4(col, alpha);
   }
@@ -305,14 +319,14 @@ export function ParticleUniverse({
 
   // Initialize signals if empty
   if (signalsRef.current.length === 0 && connectionPairs.length > 0) {
-    const count = 3; // 3 concurrent synapses max
+    const count = 4; // enough to feel alive without adding to the visual clutter
     for (let i = 0; i < count; i++) {
       signalsRef.current.push({
         startIdx: 0,
         endIdx: 0,
         progress: 0.0,
         speed: 1.0,
-        delay: Math.random() * 3.0, // initial random delay between 0 and 3 seconds
+        delay: Math.random() * 2.0, // shorter initial delay so signals start firing sooner
         active: false,
       });
     }
@@ -326,8 +340,8 @@ export function ParticleUniverse({
           uProgress: { value: 0 },
           uTime: { value: 0 },
           uPixelRatio: { value: typeof window !== "undefined" ? window.devicePixelRatio : 1 },
-          uSignalPositions: { value: [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()] },
-          uSignalIntensities: { value: [0.0, 0.0, 0.0] },
+          uSignalPositions: { value: [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()] },
+          uSignalIntensities: { value: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0] },
         },
         vertexShader: particleVertexShader,
         fragmentShader: particleFragmentShader,
@@ -344,14 +358,17 @@ export function ParticleUniverse({
         uniforms: {
           uProgress: { value: 0 },
           uTime: { value: 0 },
-          uSignalPositions: { value: [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()] },
-          uSignalIntensities: { value: [0.0, 0.0, 0.0] },
+          uSignalPositions: { value: [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()] },
+          uSignalIntensities: { value: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0] },
         },
         vertexShader: lineVertexShader,
         fragmentShader: lineFragmentShader,
         transparent: true,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        // Normal (not Additive) blending: additive was the main source of the
+        // "difuminado" look — thousands of overlapping lines were stacking
+        // into a bright nebulous smear instead of staying as distinct strokes.
+        blending: THREE.NormalBlending,
       }),
     [],
   );
@@ -376,8 +393,8 @@ export function ParticleUniverse({
     // Update signals progress and compute active positions
     const tempPosA = new THREE.Vector3();
     const tempPosB = new THREE.Vector3();
-    const signalPositionsArray = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
-    const signalIntensitiesArray = [0.0, 0.0, 0.0];
+    const signalPositionsArray = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+    const signalIntensitiesArray = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
     const getPos = (idx: number, scrollP: number, tVal: number, out: THREE.Vector3) => {
       const i3 = idx * 3;
@@ -447,13 +464,9 @@ export function ParticleUniverse({
         getPos(sig.endIdx, progress, time, tempPosB);
         signalPositionsArray[i].lerpVectors(tempPosA, tempPosB, sig.progress);
 
-        // Aplicamos la misma ondulación senoidal al pulso para que siga la arista curva
-        const networkInfluence = Math.min(1.0, Math.max(0.0, (progress - 0.33) / 0.22)) * (1.0 - Math.min(1.0, Math.max(0.0, (progress - 0.70) / 0.18)));
-        const damping = Math.sin(sig.progress * Math.PI);
-        const sigWaveY = Math.sin(time * 2.8 - signalPositionsArray[i].x * 0.4) * 0.45 * networkInfluence * damping;
-        const sigWaveZ = Math.cos(time * 2.8 - signalPositionsArray[i].x * 0.4) * 0.35 * networkInfluence * damping;
-        signalPositionsArray[i].y += sigWaveY;
-        signalPositionsArray[i].z += sigWaveZ;
+        // Removed wave for signals to match perfectly straight lines
+        // signalPositionsArray[i].y += sigWaveY;
+        // signalPositionsArray[i].z += sigWaveZ;
 
         // Sine pulse intensity: peak at middle, 0 at endpoints
         signalIntensitiesArray[i] = Math.sin(sig.progress * Math.PI);

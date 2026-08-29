@@ -142,7 +142,7 @@ export const PROJECTS: Project[] = [
       "o latinoamericanos.",
 
     notebookUrl: null, // [PENDIENTE — agregar URL de Google Colab cuando esté publicado]
-    repoUrl: null, // [PENDIENTE — agregar URL de GitHub]
+    repoUrl: "https://github.com/Nei44/German-credit-risk",
   },
 
   // ── PROYECTO 2: ANÁLISIS DE NETFLIX ───────────────────────────────────────
@@ -228,7 +228,7 @@ export const PROJECTS: Project[] = [
       "El campo 'country' tiene coproduciones que inflan conteos de ciertos países.",
 
     notebookUrl: null, // [PENDIENTE]
-    repoUrl: null, // [PENDIENTE]
+    repoUrl: "https://github.com/Nei44/Recommendations-on-Netflix",
   },
 
 
@@ -327,8 +327,117 @@ export const PROJECTS: Project[] = [
       "Sensibilidad a la liquidez y slippage dinámico en eventos de alta volatilidad no modelados en spot puro.",
 
     notebookUrl: null, // [PENDIENTE]
-    repoUrl: null, // [PENDIENTE]
-  }
+    repoUrl: "https://github.com/Nei44/BTCprediction",
+  },
 
+
+
+  // ── PROYECTO 4: PORTFOLIO OPTIMIZATION — RIESGO CREDITICIO ──────────────────
+  {
+    slug: "optimizacion-portafolio-riesgo-crediticio",
+    title: "Optimización de Portafolio de Crédito: Clasificación ML de Riesgo",
+    category: "Machine Learning · Finanzas · Clasificación",
+    status: "Completado",
+    summary:
+      "Comparación de cuatro clasificadores (Logística L1, Naive Bayes, SVM, KNN) " +
+      "sobre el German Credit Risk dataset para minimizar falsos negativos — " +
+      "clientes riesgosos no detectados — con GridSearchCV y balanced_accuracy.",
+    tools: [
+      "Python",
+      "Pandas",
+      "Scikit-learn",
+      "Matplotlib",
+      "Seaborn",
+      "GridSearchCV",
+      "Google Colab",
+    ],
+    metrics: [
+      { value: "1,000", label: "Registros analizados" },
+      { value: "4", label: "Clasificadores comparados" },
+      { value: "70/30", label: "Distribución good/bad" },
+      { value: "5-fold", label: "Cross-validation estratificada" },
+    ],
+
+    // ── Estudio de caso ──────────────────────────────────────────────────────
+    context:
+      "En el sector financiero, otorgar crédito a un cliente que no podrá pagarlo " +
+      "genera pérdidas directas que superan ampliamente el costo de rechazar a un " +
+      "cliente confiable. Este proyecto aborda ese problema usando el dataset German " +
+      "Credit Risk de Kaggle, ampliamente utilizado en la literatura de ML financiero.",
+
+    problem:
+      "Predecir si un solicitante de crédito representa un riesgo de impago (clase 'bad') " +
+      "o es un cliente confiable (clase 'good'), con especial énfasis en minimizar los " +
+      "falsos negativos — clientes riesgosos que el modelo no detecta.",
+
+    objective:
+      "Construir y comparar cuatro clasificadores (Regresión Logística, Naive Bayes, SVM " +
+      "y KNN) usando GridSearchCV con balanced_accuracy como métrica de optimización, " +
+      "y analizar en profundidad el modelo más interpretable para producción bancaria.",
+
+    dataUsed:
+      "German Credit Risk dataset (Kaggle) — 1,000 registros de solicitantes de crédito " +
+      "con 10 variables: datos demográficos (edad, sexo, tipo de vivienda), situación " +
+      "financiera (saldo de cuentas de ahorro y corriente), y características del " +
+      "préstamo (monto, plazo, propósito). Distribución de clases: 70% good, 30% bad.",
+
+    cleaningProcess:
+      "'Saving accounts' (62 nulos, 6.2%): imputado con la moda ('little') por ser " +
+      "una proporción pequeña sin sesgo significativo. " +
+      "'Checking account' (394 nulos, 39.4%): imputado con categoría 'unknown' — " +
+      "la ausencia de información sobre la cuenta corriente se trata como una señal " +
+      "propia que el modelo puede aprender. Se eliminó la columna 'Age' original tras " +
+      "crear la variable derivada 'Age group' con cuatro rangos etarios. " +
+      "Se descartó 'Risk_prob' del conjunto de características para evitar fuga de " +
+      "información (data leakage).",
+
+    methodology:
+      "1. Segmentación de edad en cuatro grupos con pd.cut() para capturar relaciones " +
+      "no lineales. " +
+      "2. Codificación ordinal manual de todas las variables categóricas, preservando " +
+      "el orden real (ej. 'little' < 'moderate' < 'quite rich' < 'rich'). " +
+      "3. Escalado con StandardScaler (media=0, desv=1) para igualar la escala de " +
+      "variables como Credit amount (rango ~250-18,000) frente a Age group (rango 0-3). " +
+      "4. División 80/20 con stratify=y para mantener la proporción de clases. " +
+      "5. GridSearchCV (cv=5, scoring='balanced_accuracy') sobre los cuatro modelos. " +
+      "6. Análisis profundo de Regresión Logística con L1 por su interpretabilidad. " +
+      "7. Permutation importance para NB, SVM y KNN (sin coeficientes directos).",
+
+    visualizations:
+      "EDA: distribución por grupo de edad, cuentas bancarias y variable objetivo; " +
+      "matrices de correlación con get_dummies(); probabilidad empírica de riesgo " +
+      "por categoría (barplot sobre Risk_prob 0/1); boxplots de monto por propósito " +
+      "y nivel laboral; curva KDE de cuota mensual estimada por tipo de cuenta. " +
+      "Modelos: matriz de confusión + curva ROC para cada clasificador; " +
+      "coeficientes L1 (Regresión Logística); permutation importance (NB, SVM, KNN); " +
+      "distribución de probabilidades predichas con umbral de decisión.",
+
+    results:
+      "[COMPLETAR con los resultados reales una vez ejecutado el notebook] " +
+      "Estructura esperada: SVM obtuvo el mayor balanced_accuracy (X.XX) con un " +
+      "recall de X.XX en la clase bad y especificidad de X.XX. La Regresión Logística " +
+      "con L1 identificó Checking account y Duration como las variables de mayor peso.",
+
+    learnings:
+      "El desequilibrio de clases (70/30) exige métricas específicas: balanced_accuracy " +
+      "en lugar de accuracy simple, y class_weight='balanced' en los modelos. " +
+      "La fuga de información (data leakage) es el error más silencioso en ML: incluir " +
+      "Risk_prob en X hacía que el modelo 'aprendiera' la respuesta directamente, " +
+      "produciendo distribuciones de probabilidad degeneradas (solo 0 o 1). " +
+      "La interpretabilidad tiene valor propio: SVM puede superar a la Regresión " +
+      "Logística en métricas, pero en banca se requiere poder explicar cada rechazo.",
+
+    limitations:
+      "1,000 registros es suficiente para aprendizaje pero insuficiente para producción " +
+      "— los modelos necesitarían validación con datasets más grandes. " +
+      "El tratamiento de 'Checking account' como 'unknown' reduce ruido pero introduce " +
+      "información artificial en una variable con 39% de nulos. " +
+      "No se realizó validación out-of-time (datos de un periodo diferente). " +
+      "El dataset es de origen alemán y puede no reflejar patrones crediticios mexicanos " +
+      "o latinoamericanos.",
+
+    notebookUrl: null, // [PENDIENTE — agregar URL de Google Colab cuando esté publicado]
+    repoUrl: "https://github.com/Nei44/PORTFOLIO-OPTIMIZATION",
+  },
 
 ];

@@ -1,0 +1,6 @@
+Fase 1: Ingesta y Limpieza de Datos (Alineación temporal, precios ajustados, validación de retornos).
+Fase 2: Análisis Exploratorio y Propiedades Estadísticas (Log vs. Simple, asimetría, curtosis, matrices de correlación).
+Fase 3: Simulación Monte Carlo (Espacio de búsqueda factible y visualización del riesgo/retorno).
+Fase 4 & 5: Optimización Cuantitativa y Frontera Eficiente (Mínima varianza y Máximo Sharpe vía scipy.optimize).
+Fase 6: Backtesting Out-of-Sample (Evaluación de pesos fijos frente a S&P 500 y $1/N$).
+Fase 7 & 8: Robustez, Errores de Estimación y Narrativa de Portafolio.
