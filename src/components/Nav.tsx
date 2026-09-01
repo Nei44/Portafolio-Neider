@@ -91,7 +91,7 @@ export function Nav() {
                   className={`relative rounded-[var(--radius-sm)] px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors duration-150 ${
                     isActive
                       ? "text-accent"
-                      : "text-text-secondary hover:text-text-primary"
+                      : "text-white hover:text-accent"
                   }`}
                 >
                   {item.label}
@@ -107,7 +107,7 @@ export function Nav() {
         <div className="hidden md:block">
           <a
             href="/cv-neider-arenas.pdf"
-            className="rounded-[var(--radius-sm)] border border-border-strong px-4 py-2 font-mono text-xs uppercase tracking-wider text-text-primary transition-all duration-200 hover:border-accent hover:text-accent hover:shadow-[var(--glow-accent)]"
+            className="rounded-[var(--radius-sm)] border border-border-strong px-4 py-2 font-mono text-xs uppercase tracking-wider text-white transition-all duration-200 hover:border-accent hover:text-accent hover:shadow-[var(--glow-accent)]"
           >
             Descargar CV
           </a>

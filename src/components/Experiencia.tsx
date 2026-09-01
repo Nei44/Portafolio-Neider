@@ -13,10 +13,10 @@ export function Experiencia() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true, margin: "-80px" }}
         >
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="mb-3 font-mono text-sm uppercase tracking-[0.2em] text-accent">
             {"// 03"}
           </p>
-          <h2 className="font-display text-3xl font-semibold text-text-primary sm:text-4xl">
+          <h2 className="font-display text-4xl font-semibold text-text-primary sm:text-5xl">
             Experiencia
           </h2>
         </motion.div>
@@ -46,21 +46,21 @@ export function Experiencia() {
                 aria-hidden="true"
               />
 
-              <p className="font-mono text-xs uppercase tracking-wider text-text-tertiary">
+              <p className="font-mono text-sm uppercase tracking-wider text-white">
                 {entry.period}
               </p>
-              <h3 className="mt-1 font-display text-lg font-semibold text-text-primary">
+              <h3 className="mt-1 font-display text-xl font-semibold text-text-primary">
                 {entry.role}
               </h3>
               <p className="font-mono text-sm text-accent">{entry.org}</p>
-              <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+              <p className="mt-3 text-base leading-relaxed text-white">
                 {entry.summary}
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {entry.tools.map((tool) => (
                   <span
                     key={tool}
-                    className="rounded-full bg-surface px-2.5 py-1 font-mono text-xs text-text-tertiary"
+                    className="rounded-full bg-surface px-2.5 py-1 font-mono text-sm text-white"
                   >
                     {tool}
                   </span>

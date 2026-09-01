@@ -47,7 +47,7 @@ export default async function ProjectPage({
     <main id="main" className="mx-auto max-w-3xl px-5 py-24 sm:px-8">
       <Link
         href="/#proyectos"
-        className="font-mono text-xs text-text-tertiary transition-colors duration-150 hover:text-accent"
+        className="font-mono text-xs text-white transition-colors duration-150 hover:text-accent"
       >
         ← Volver a proyectos
       </Link>
@@ -55,17 +55,17 @@ export default async function ProjectPage({
       <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-accent">
         {project.category}
       </p>
-      <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">
         {project.title}
       </h1>
-      <p className="mt-4 text-base leading-relaxed text-text-secondary">{project.summary}</p>
+      <p className="mt-4 text-base leading-relaxed text-white">{project.summary}</p>
 
       {project.metrics && project.metrics.length > 0 && (
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 border-y border-border py-6">
           {project.metrics.map((metric, i) => (
             <div key={i}>
               <p className="text-2xl font-semibold text-accent">{metric.value}</p>
-              <p className="mt-1 text-xs text-text-tertiary uppercase tracking-wider">{metric.label}</p>
+              <p className="mt-1 text-xs text-white uppercase tracking-wider">{metric.label}</p>
             </div>
           ))}
         </div>
@@ -75,7 +75,7 @@ export default async function ProjectPage({
         {project.tools.map((tool) => (
           <span
             key={tool}
-            className="rounded-sm bg-surface px-2 py-1 font-mono text-xs text-text-tertiary"
+            className="rounded-sm bg-surface px-2 py-1 font-mono text-xs text-white"
           >
             {tool}
           </span>
@@ -88,7 +88,7 @@ export default async function ProjectPage({
             <dt className="font-mono text-xs uppercase tracking-wider text-accent">
               {label}
             </dt>
-            <dd className="mt-2 text-sm leading-relaxed text-text-secondary">
+            <dd className="mt-2 text-sm leading-relaxed text-white">
               {project[key] as string}
             </dd>
           </div>
@@ -100,12 +100,12 @@ export default async function ProjectPage({
           <a
             href={project.repoUrl}
             target="_blank" rel="noopener noreferrer"
-            className="rounded-sm border border-border-strong px-4 py-2 font-mono text-xs text-text-primary hover:border-accent hover:text-accent"
+            className="rounded-sm border border-border-strong px-4 py-2 font-mono text-xs text-white hover:border-accent hover:text-accent"
           >
             Repositorio
           </a>
         ) : (
-          <span className="rounded-sm border border-dashed border-border-strong px-4 py-2 font-mono text-xs text-text-tertiary">
+          <span className="rounded-sm border border-dashed border-border-strong px-4 py-2 font-mono text-xs text-white">
             [ENLACE AL REPOSITORIO PENDIENTE]
           </span>
         )}
@@ -113,7 +113,7 @@ export default async function ProjectPage({
           <a
             href={project.notebookUrl}
             target="_blank" rel="noopener noreferrer"
-            className="rounded-sm border border-border-strong px-4 py-2 font-mono text-xs text-text-primary hover:border-accent hover:text-accent"
+            className="rounded-sm border border-border-strong px-4 py-2 font-mono text-xs text-white hover:border-accent hover:text-accent"
           >
             Notebook
           </a>

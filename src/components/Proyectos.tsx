@@ -14,13 +14,13 @@ export function Proyectos() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true, margin: "-80px" }}
         >
-          <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="mb-2 font-mono text-sm uppercase tracking-[0.2em] text-accent">
             {"// 01"}
           </p>
-          <h2 className="font-display text-3xl font-semibold text-text-primary md:text-[40px] md:leading-tight">
+          <h2 className="font-display text-4xl font-semibold text-text-primary md:text-5xl md:leading-tight">
             Proyectos
           </h2>
-          <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-text-secondary">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-white">
             Presentados como estudios de caso: contexto, metodología,
             herramientas y resultados — no solo una lista de tecnologías.
           </p>

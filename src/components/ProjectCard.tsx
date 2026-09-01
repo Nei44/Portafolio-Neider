@@ -107,7 +107,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       href={`/proyectos/${project.slug}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="glass-card group relative block p-6 h-full overflow-hidden"
+      className="glass-card group relative block p-6 h-full overflow-hidden hover:shadow-[0_0_40px_rgba(245,185,66,0.4),0_0_80px_rgba(245,185,66,0.15),0_1px_0_0_rgba(255,255,255,0.12)_inset]"
     >
       {/* Micro-visualization of data in the background */}
       <div className="absolute right-4 bottom-14 w-36 h-16 pointer-events-none opacity-100 z-10">
@@ -116,11 +116,11 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
 
       {/* Header index + diagonal arrow */}
       <div className="mb-4 flex items-center justify-between">
-        <span className="font-mono text-xs tracking-wider text-accent">
+        <span className="font-mono text-sm tracking-wider text-accent">
           {formattedIndex}
         </span>
         <svg
-          className="w-5 h-5 text-text-tertiary transition-all duration-300 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          className="w-5 h-5 text-white transition-all duration-300 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
@@ -131,12 +131,12 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       </div>
 
       {/* Title */}
-      <h3 className="font-display text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-accent">
+      <h3 className="font-display text-xl font-semibold text-text-primary transition-colors duration-300 group-hover:text-accent">
         {project.title}
       </h3>
 
       {/* Short description */}
-      <p className="mt-3 text-sm leading-relaxed text-text-secondary max-w-[85%]">
+      <p className="mt-3 text-base leading-relaxed text-white max-w-[85%]">
         {project.summary}
       </p>
 
@@ -145,7 +145,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         {project.tools.slice(0, 3).map((tool) => (
           <span
             key={tool}
-            className="h-[26px] px-2 flex items-center font-mono text-[12px] text-text-secondary border border-[#252932] bg-[#101217]/40 rounded-[5px] transition-colors duration-350 group-hover:border-accent/30"
+            className="h-[28px] px-2 flex items-center font-mono text-sm text-white border border-[#252932] bg-[#101217]/40 rounded-[5px] transition-colors duration-350 group-hover:border-accent/30"
           >
             {tool}
           </span>
@@ -154,7 +154,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
 
       {/* Link Level 3 CTA */}
       <div className="mt-6">
-        <span className="inline-flex items-center gap-1 font-mono text-xs text-accent">
+        <span className="inline-flex items-center gap-1 font-mono text-sm text-accent">
           Explorar ↗
         </span>
       </div>

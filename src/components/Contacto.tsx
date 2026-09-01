@@ -52,21 +52,21 @@ export function Contacto() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             viewport={{ once: true, margin: "-80px" }}
           >
-            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            <p className="mb-3 font-mono text-sm uppercase tracking-[0.2em] text-accent">
               {"// 04"}
             </p>
-            <h2 className="font-display text-3xl font-semibold text-text-primary sm:text-4xl">
+            <h2 className="font-display text-4xl font-semibold text-text-primary sm:text-5xl">
               Contacto
             </h2>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-text-secondary">
+            <p className="mt-4 max-w-sm text-base leading-relaxed text-white">
               Abierto a nuevas oportunidades en análisis de datos y ciencia de
               datos. ¡Escríbeme!
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 font-mono text-sm">
+            <div className="mt-8 flex flex-col gap-3 font-mono text-base">
               <a
                 href="mailto:correo@ejemplo.com"
-                className="text-text-secondary transition-colors duration-150 hover:text-accent"
+                className="text-white transition-colors duration-150 hover:text-accent"
               >
                 correo@ejemplo.com
               </a>
@@ -74,7 +74,7 @@ export function Contacto() {
                 href="https://github.com/Nei44"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-secondary transition-colors duration-150 hover:text-accent"
+                className="text-white transition-colors duration-150 hover:text-accent"
               >
                 GitHub
               </a>
@@ -82,7 +82,7 @@ export function Contacto() {
                 href="https://www.linkedin.com/in/neider-arenas-de-la-cruz-163439308?utm_source=share_via&utm_content=profile&utm_medium=member_android"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-secondary transition-colors duration-150 hover:text-accent"
+                className="text-white transition-colors duration-150 hover:text-accent"
               >
                 LinkedIn
               </a>
@@ -119,7 +119,7 @@ export function Contacto() {
               <div>
                 <label
                   htmlFor="name"
-                  className="block font-mono text-xs uppercase tracking-wider text-text-tertiary"
+                  className="block font-mono text-sm uppercase tracking-wider text-white"
                 >
                   Nombre
                 </label>
@@ -141,7 +141,7 @@ export function Contacto() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block font-mono text-xs uppercase tracking-wider text-text-tertiary"
+                  className="block font-mono text-sm uppercase tracking-wider text-white"
                 >
                   Correo
                 </label>
@@ -163,7 +163,7 @@ export function Contacto() {
               <div>
                 <label
                   htmlFor="message"
-                  className="block font-mono text-xs uppercase tracking-wider text-text-tertiary"
+                  className="block font-mono text-sm uppercase tracking-wider text-white"
                 >
                   Mensaje
                 </label>

@@ -105,13 +105,13 @@ export function Habilidades() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true, margin: "-80px" }}
         >
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="mb-3 font-mono text-sm uppercase tracking-[0.2em] text-accent">
             {"// 02"}
           </p>
-          <h2 className="font-display text-3xl font-semibold text-text-primary sm:text-4xl">
+          <h2 className="font-display text-4xl font-semibold text-text-primary sm:text-5xl">
             Habilidades
           </h2>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary">
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-white">
             Tecnologías y herramientas clave con su especialización técnica secundaria.
           </p>
         </motion.div>
@@ -129,16 +129,16 @@ export function Habilidades() {
                 ease: [0.22, 1, 0.36, 1],
               }}
               viewport={{ once: true, margin: "-60px" }}
-              className="glass-card group flex flex-col items-center justify-between p-5 text-center h-[140px] w-full transition-all duration-300 hover:border-accent/50 hover:shadow-[0_0_20px_rgba(245,185,66,0.15)]"
+              className="glass-card group flex flex-col items-center justify-between p-5 text-center h-[140px] w-full transition-all duration-300 hover:border-accent/50 hover:shadow-[0_0_35px_rgba(245,185,66,0.35),0_0_60px_rgba(245,185,66,0.15)]"
             >
               <div className="flex-1 flex items-center justify-center">
                 {getLogo(skill.icon)}
               </div>
               <div className="mt-3">
-                <h3 className="font-display text-sm font-semibold text-text-primary">
+                <h3 className="font-display text-base font-semibold text-text-primary">
                   {skill.name}
                 </h3>
-                <p className="text-[11px] font-sans text-text-secondary mt-0.5 whitespace-nowrap">
+                <p className="text-sm font-sans text-white mt-0.5 whitespace-nowrap">
                   {skill.subtitle}
                 </p>
               </div>
