@@ -21,8 +21,10 @@ export function Proyectos() {
             Proyectos
           </h2>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-white">
-            Presentados como estudios de caso: contexto, metodología,
-            herramientas y resultados — no solo una lista de tecnologías.
+            Proyectos enfocados en resolver problemas financieros y analíticos
+            reales. Cada desarrollo prioriza la validación metodológica, la
+            detección de sesgos y la explicabilidad del modelo por encima de
+            la simple aplicación de algoritmos.
           </p>
         </motion.div>
 

@@ -46,16 +46,24 @@ export function Experiencia() {
                 aria-hidden="true"
               />
 
-              <p className="font-mono text-sm uppercase tracking-wider text-white">
-                {entry.period}
-              </p>
+
               <h3 className="mt-1 font-display text-xl font-semibold text-text-primary">
                 {entry.role}
               </h3>
               <p className="font-mono text-sm text-accent">{entry.org}</p>
-              <p className="mt-3 text-base leading-relaxed text-white">
-                {entry.summary}
-              </p>
+              <div className="mt-3 space-y-2 text-base leading-relaxed text-white">
+                {entry.summary.split("\n\n").map((block, j) =>
+                  block.startsWith("·") ? (
+                    <p key={j} className="pl-3 border-l border-accent/30 text-white">
+                      {block}
+                    </p>
+                  ) : (
+                    <p key={j} className="text-white text-sm font-mono uppercase tracking-wide">
+                      {block}
+                    </p>
+                  )
+                )}
+              </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 {entry.tools.map((tool) => (
                   <span

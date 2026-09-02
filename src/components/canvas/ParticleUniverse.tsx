@@ -152,11 +152,11 @@ const particleFragmentShader = /* glsl */ `
     // exponent, so points are drawn as defined discs instead.
     float core = 1.0 - smoothstep(0.36, 0.5, dist);
 
-    float alpha = vAlpha * core * 1.9;
-    alpha = mix(alpha, alpha * 1.6 + 0.4, clamp(vSignalGlow, 0.0, 1.0));
+    float alpha = vAlpha * core * 1.71;
+    alpha = mix(alpha, alpha * 1.44 + 0.36, clamp(vSignalGlow, 0.0, 1.0));
 
-    vec3 col = vColor * 1.9;
-    col += vColor * vSignalGlow * 4.0;
+    vec3 col = vColor * 1.71;
+    col += vColor * vSignalGlow * 3.6;
 
     // Small hot-white glint in the center, still tightly bounded — a sharp
     // specular highlight, not a wide soft core
@@ -236,9 +236,9 @@ const lineFragmentShader = /* glsl */ `
       signalGlow += smoothstep(0.7, 0.0, dist) * uSignalIntensities[i];
     }
 
-    // Restrained multiplier — 1.3 was clipping toward yellow where lines overlap
-    vec3 col = mix(vColor * 1.05, vec3(1.0, 1.0, 1.0), signalGlow * 1.5);
-    float alpha = mix(vAlpha, vAlpha * 4.0 + 0.6, clamp(signalGlow, 0.0, 1.0));
+    // Restrained multiplier — reduced to 90% to avoid competing with foreground
+    vec3 col = mix(vColor * 0.945, vec3(1.0, 1.0, 1.0), signalGlow * 1.35);
+    float alpha = mix(vAlpha, vAlpha * 3.6 + 0.54, clamp(signalGlow, 0.0, 1.0));
 
     gl_FragColor = vec4(col, alpha);
   }
